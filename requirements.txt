@@ -1,0 +1,4 @@
+fuzzywuzzy==0.18.0
+pandas==1.2.2
+streamlit==0.82.0
+mojimoji==0.0.11
