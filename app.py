@@ -26,9 +26,10 @@ def read_csv():
 df_list,nykf,nycf,nycf2 = read_csv()
 lastrow = len(df_list)
 
-code = st.sidebar.text_input('品名部位を入力 半角全角OK', '')
+code = st.sidebar.text_input('品名部位を入力 半角全角、大小文字OK', '')
 code2 = st.sidebar.text_input('部品コードを入力 半角のみ 大小文字は正確に', '')
-buhincode = ''
+buhincode1 = ''
+buhincode2 = ''
 
 st.sidebar.write("""
 ## 検索値マッチ率(%)
@@ -40,27 +41,35 @@ st.sidebar.write("""
 """)
 display = st.sidebar.slider('件数', 5, 20, 10)
 
+st.sidebar.write('データ更新日:2021-05-31')
+st.sidebar.write('Ver.1.000.02')
 
 
 df2 = pd.DataFrame({'部番': [], '品名': [], 'マッチ率': []})
 
 if code != '':
+    comment = st.empty()
+    comment.write('Hold the line, please')
     code = code.upper()
     input_txt = mojimoji.han_to_zen(code)
     
+    #for i in range(0,lastrow):
     for i in range(0,lastrow):
         #検索部位OCRとマスターを照合
-        s = fuzz.ratio(input_txt , df_list.iloc[i,1])
-        
+        try:
+            s = fuzz.ratio(input_txt , df_list.iloc[i,1])
+        except:
+            pass
+
         if s > match:  #マッチ率より上        
             df2 = df2.append({'部番': df_list.iloc[i,0], '品名': df_list.iloc[i,2], 'マッチ率': s}, ignore_index=True)
 
     if len(df2) > 0:
+        comment.write('')
         df2 = df2.sort_values(by='マッチ率',ascending=False).reset_index(drop=True)
-        st.write('表示件数を11以上にした場合はView FullScreenにしてください。')
         st.write(df2.head(display))
     
-    buhincode = st.multiselect(
+    buhincode1 = st.multiselect(
                 '部品コードを選択してください。',
                 list(df2['部番'][:display]))
 
@@ -81,23 +90,40 @@ if code2 != '':
         df2 = df2.sort_values(by='マッチ率',ascending=False).reset_index(drop=True)
         st.write(df2.head(display))
 
-    buhincode = st.multiselect(
+    buhincode2 = st.multiselect(
                 '部品コードを選択してください。',
                 list(df2['部番'][:display]))
 
-if buhincode != '':
+if buhincode1 != '':
     try:
         st.write('構成情報')
-        st.write(nycf.loc[buhincode])
+        st.write(nycf.loc[buhincod1])
     except:
         pass
     try:
         st.write('工程情報')
-        st.write(nykf.loc[buhincode])
+        st.write(nykf.loc[buhincode1])
     except:
         pass
     try:
         st.write('共通部品')
-        st.write(nycf2.loc[buhincode])
+        st.write(nycf2.loc[buhincode1])
+    except:
+        pass
+
+if buhincode2 != '':
+    try:
+        st.write('構成情報')
+        st.write(nycf.loc[buhincode2])
+    except:
+        pass
+    try:
+        st.write('工程情報')
+        st.write(nykf.loc[buhincode2])
+    except:
+        pass
+    try:
+        st.write('共通部品')
+        st.write(nycf2.loc[buhincode2])
     except:
         pass
