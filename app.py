@@ -41,7 +41,7 @@ st.sidebar.write("""
 """)
 display = st.sidebar.slider('件数', 5, 20, 10)
 
-st.sidebar.write('データ更新日:2021-08-20')
+st.sidebar.write('データ更新日:2022-02-08')
 st.sidebar.write('Ver.1.000.02')
 
 
