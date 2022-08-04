@@ -41,8 +41,8 @@ st.sidebar.write("""
 """)
 display = st.sidebar.slider('件数', 5, 20, 10)
 
-st.sidebar.write('データ更新日:2022-02-08')
-st.sidebar.write('Ver.1.000.02')
+st.sidebar.write('データ更新日:2022-08-04')
+st.sidebar.write('Ver.1.000.03')
 
 
 df2 = pd.DataFrame({'部番': [], '品名': [], 'マッチ率': []})
